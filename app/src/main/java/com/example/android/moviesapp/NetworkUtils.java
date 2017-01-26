@@ -32,7 +32,7 @@ public class NetworkUtils {
     final static String PARAM_API_KEY = "api_key";
 
     final static String API_KEY = "";
-    
+
 
     /**
      * Builds the URL used to query MovieDB for movies sorted by popularity.

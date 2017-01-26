@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -25,18 +26,42 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     final static String PICASSO_IMAGE_BASE_URL =
             "http://image.tmdb.org/t/p/w500/";
 
-    /**
-     * Constructor for MovieAdapter
-     */
-    public MovieAdapter() {
+    private final MovieAdapterOnClickHandler mClickHandler;
 
+    /**
+     * The interface that receives onClick messages.
+     */
+    public interface MovieAdapterOnClickHandler {
+        void onClick(String[] specificMovie);
     }
 
-    public class MovieViewHolder extends RecyclerView.ViewHolder {
+    /**
+     * Constructor for MovieAdapter
+     *  @param clickHandler The on-click handler for this adapter. This single handler is called
+     */
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+    }
+
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public final ImageView listMovieImageView;
         public MovieViewHolder(View itemView){
             super(itemView);
             listMovieImageView = (ImageView) itemView.findViewById(R.id.iv_item_movie);
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * This gets called by the child views during a click.
+         *
+         * @param view The View that was clicked
+         */
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            String[] specificMovieDetails = mMovieItems.get(adapterPosition);
+            mClickHandler.onClick(specificMovieDetails);
         }
     }
 

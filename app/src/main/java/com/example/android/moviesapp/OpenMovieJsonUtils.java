@@ -59,11 +59,12 @@ public class OpenMovieJsonUtils {
             SimpleDateFormat fmtOut = new SimpleDateFormat("MMM dd, yyyy");
             String formattedDate = fmtOut.format(date);
 
-            String[] specificMovieData = new String[4];
+            String[] specificMovieData = new String[5];
             specificMovieData[0] = poster;
             specificMovieData[1] = title;
             specificMovieData[2] = overview;
             specificMovieData[3] = formattedDate;
+            specificMovieData[4] = Double.valueOf(votes).toString();
 
             parsedMovieData.add(specificMovieData);
         }

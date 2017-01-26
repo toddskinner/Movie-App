@@ -1,5 +1,6 @@
 package com.example.android.moviesapp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.android.moviesapp.MovieAdapter.MovieAdapterOnClickHandler;
+
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapterOnClickHandler {
 
     private MovieAdapter mMovieAdapter;
     private RecyclerView mMoviesListRecyclerView;
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mMoviesListRecyclerView.setLayoutManager(layoutManager);
         mMoviesListRecyclerView.setHasFixedSize(true);
 
-        mMovieAdapter = new MovieAdapter();
+        mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
         mMovieSearchUrl = NetworkUtils.buildPopularUrl();
@@ -43,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
     // method that will execute AsyncTask
     private void loadMovieData(URL movieSearchUrl){
         new MovieQueryTask().execute(movieSearchUrl);
+    }
+
+    @Override
+    public void onClick(String[] specificMovie) {
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        intent.putExtra("detailsArray", specificMovie);
+        startActivity(intent);
     }
 
     public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList<String[]>> {
