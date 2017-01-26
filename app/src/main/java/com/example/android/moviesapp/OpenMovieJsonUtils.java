@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
  */
 
 public class OpenMovieJsonUtils {
-    public static String[] getSimpleMovieStringsFromJson(Context context, String moviesJsonStr)
+    public static ArrayList<String[]> getSimpleMovieStringsFromJson(Context context, String moviesJsonStr)
             throws JSONException, ParseException {
 
         /* Movie information. Each movie's info is an element of the "results" array */
@@ -28,13 +29,13 @@ public class OpenMovieJsonUtils {
         final String OM_VOTE_AVG = "vote_average";
 
         /* String array to hold each movie's info String */
-        String[] parsedMovieData = null;
+
 
         JSONObject forecastJson = new JSONObject(moviesJsonStr);
 
         JSONArray movieListArray = forecastJson.getJSONArray(OM_RESULTS);
 
-        parsedMovieData = new String[movieListArray.length()];
+        ArrayList<String[]> parsedMovieData = new ArrayList<String[]>();
 
         for (int i = 0; i < movieListArray.length(); i++) {
             String poster;
@@ -58,7 +59,13 @@ public class OpenMovieJsonUtils {
             SimpleDateFormat fmtOut = new SimpleDateFormat("MMM dd, yyyy");
             String formattedDate = fmtOut.format(date);
 
-            parsedMovieData[i] = poster + " - " + title + " - " + overview + " - " + votes + " - " + formattedDate;
+            String[] specificMovieData = new String[4];
+            specificMovieData[0] = poster;
+            specificMovieData[1] = title;
+            specificMovieData[2] = overview;
+            specificMovieData[3] = formattedDate;
+
+            parsedMovieData.add(specificMovieData);
         }
 
         return parsedMovieData;

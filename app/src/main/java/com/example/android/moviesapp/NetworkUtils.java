@@ -32,9 +32,7 @@ public class NetworkUtils {
     final static String PARAM_API_KEY = "api_key";
 
     final static String API_KEY = "";
-
-    final static String POPULAR_ENDPOINT = "/movie/popular";
-    final static String TOP_RATED_ENDPOINT = "/movie/top_rated";
+    
 
     /**
      * Builds the URL used to query MovieDB for movies sorted by popularity.

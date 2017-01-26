@@ -3,16 +3,21 @@ package com.example.android.moviesapp;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mSearchResultsTextView;
+    private MovieAdapter mMovieAdapter;
+    private RecyclerView mMoviesListRecyclerView;
+
     TextView mErrorMessageTextView;
     URL mMovieSearchUrl;
 
@@ -21,35 +26,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSearchResultsTextView = (TextView) findViewById(R.id.movie_search_results_json);
+        mMoviesListRecyclerView = (RecyclerView) findViewById(R.id.rv_movies);
         mErrorMessageTextView = (TextView) findViewById(R.id.error_message_display);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        mMoviesListRecyclerView.setLayoutManager(layoutManager);
+        mMoviesListRecyclerView.setHasFixedSize(true);
+
+        mMovieAdapter = new MovieAdapter();
+        mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
         mMovieSearchUrl = NetworkUtils.buildPopularUrl();
         loadMovieData(mMovieSearchUrl);
     }
 
-    // TODO (8) Create a method that will get the user's preferred location and execute your new AsyncTask and call it loadWeatherData
+    // method that will execute AsyncTask
     private void loadMovieData(URL movieSearchUrl){
         new MovieQueryTask().execute(movieSearchUrl);
     }
 
-    public class MovieQueryTask extends AsyncTask<URL, Void, String[]> {
+    public class MovieQueryTask extends AsyncTask<URL, Void, ArrayList<String[]>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            mProgressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected String[] doInBackground(URL... params) {
+        protected ArrayList<String[]> doInBackground(URL... params) {
             if (params.length == 0) {
                 return null;
             }
             mMovieSearchUrl = params[0];
             try {
                 String movieSearchResults = NetworkUtils.getResponseFromHttpUrl(mMovieSearchUrl);
-                String[] readableJsonMovieData = OpenMovieJsonUtils.getSimpleMovieStringsFromJson(MainActivity.this, movieSearchResults);
+                ArrayList<String[]> readableJsonMovieData = OpenMovieJsonUtils.getSimpleMovieStringsFromJson(MainActivity.this, movieSearchResults);
                 return readableJsonMovieData;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -58,13 +69,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(String[] movieData) {
-//            mProgressBar.setVisibility(View.INVISIBLE);
-            if (movieData != null && !movieData.equals("")) {
+        protected void onPostExecute(ArrayList<String[]> movieData) {
+            if (movieData != null) {
                 showJsonDataView();
-                for (String movieString : movieData) {
-                    mSearchResultsTextView.append((movieString) + "\n\n\n");
-                }
+                mMovieAdapter.setMovieData(movieData);
             } else {
                 showErrorMessage();
             }
@@ -74,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
     //method called to show the data and hide the error
     private void showJsonDataView(){
         mErrorMessageTextView.setVisibility(View.INVISIBLE);
-        mSearchResultsTextView.setVisibility(View.VISIBLE);
+        mMoviesListRecyclerView.setVisibility(View.VISIBLE);
     }
 
     //method to show the error and hide the data
     private void showErrorMessage(){
         mErrorMessageTextView.setVisibility(View.VISIBLE);
-        mSearchResultsTextView.setVisibility(View.INVISIBLE);
+        mMoviesListRecyclerView.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -94,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_sort_popular:
                 URL movieSearchPopularUrl = NetworkUtils.buildPopularUrl();
-                mSearchResultsTextView.setText("");
+                mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchPopularUrl);
                 return true;
             case R.id.action_sort_top_rated:
                 URL movieSearchTopRatedUrl = NetworkUtils.buildTopRatedUrl();
-                mSearchResultsTextView.setText("");
+                mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchTopRatedUrl);
                 return true;
         }

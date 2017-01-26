@@ -1,0 +1,85 @@
+package com.example.android.moviesapp;
+
+import android.content.Context;
+import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+/**
+ * Created by toddskinner on 1/25/17.
+ */
+
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+
+    private ArrayList<String[]> mMovieItems;
+
+    final static String PICASSO_IMAGE_BASE_URL =
+            "http://image.tmdb.org/t/p/w500/";
+
+    /**
+     * Constructor for MovieAdapter
+     */
+    public MovieAdapter() {
+
+    }
+
+    public class MovieViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView listMovieImageView;
+        public MovieViewHolder(View itemView){
+            super(itemView);
+            listMovieImageView = (ImageView) itemView.findViewById(R.id.iv_item_movie);
+        }
+    }
+
+    @Override
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        int layoutIdForListItem = R.layout.movie_list_item;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        boolean shouldAttachToParentImmediately = false;
+
+        View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
+        MovieViewHolder viewHolder = new MovieViewHolder(view);
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(MovieViewHolder holder, int position) {
+        String[] infoForThisMovie = mMovieItems.get(position);
+        String posterPath = infoForThisMovie[0];
+
+        Uri builtUri = Uri.parse(PICASSO_IMAGE_BASE_URL).buildUpon()
+                .appendEncodedPath(posterPath)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Picasso.with(holder.listMovieImageView.getContext()).load(url.toString()).into(holder.listMovieImageView);
+    }
+
+    @Override
+    public int getItemCount() {
+        if(mMovieItems == null){
+            return 0;
+        } else {
+            return mMovieItems.size();
+        }
+    }
+
+    public void setMovieData(ArrayList<String[]> movieData){
+        mMovieItems = movieData;
+        notifyDataSetChanged();
+    }
+}
