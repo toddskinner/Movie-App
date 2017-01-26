@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Movies App</string>
 
-    <string name="popular">Popular</string>
+    <string name="popular">Sort By Popularity</string>
 
-    <string name="top_rated">Top Rated</string>
+    <string name="top_rated">Sort By Top-Rated</string>
 
     <string name="error">Failed to get a result</string>
+
+    <string name="rating">Rating:</string>
 </resources>
