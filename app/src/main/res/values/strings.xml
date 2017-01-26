@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movies App</string>
+
+    <string name="popular">Popular</string>
+
+    <string name="top_rated">Top Rated</string>
+
+    <string name="error">Failed to get a result</string>
+</resources>
