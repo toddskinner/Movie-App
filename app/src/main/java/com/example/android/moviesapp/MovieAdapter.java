@@ -24,7 +24,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private ArrayList<String[]> mMovieItems;
 
     final static String PICASSO_IMAGE_BASE_URL =
-            "http://image.tmdb.org/t/p/w500/";
+            "http://image.tmdb.org/t/p/w342/";
 
     private final MovieAdapterOnClickHandler mClickHandler;
 

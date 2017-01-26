@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMoviesListRecyclerView = (RecyclerView) findViewById(R.id.rv_movies);
         mErrorMessageTextView = (TextView) findViewById(R.id.error_message_display);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         mMoviesListRecyclerView.setLayoutManager(layoutManager);
         mMoviesListRecyclerView.setHasFixedSize(true);
 
