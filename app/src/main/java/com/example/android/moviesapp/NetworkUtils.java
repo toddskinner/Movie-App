@@ -14,6 +14,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import static com.example.android.moviesapp.BuildConfig.API_KEY;
+
 /**
  * These utilities will be used to communicate with the network.
  */
@@ -30,9 +32,6 @@ public class NetworkUtils {
             "https://api.themoviedb.org/3/movie/top_rated";
 
     final static String PARAM_API_KEY = "api_key";
-
-    final static String API_KEY = "";
-
 
     /**
      * Builds the URL used to query MovieDB for movies sorted by popularity.
