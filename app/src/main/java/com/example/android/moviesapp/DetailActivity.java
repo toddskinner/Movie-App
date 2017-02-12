@@ -3,6 +3,7 @@ package com.example.android.moviesapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mDisplayReleaseDate;
     private TextView mDisplayVotes;
     private TextView mDisplaySummary;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayReleaseDate = (TextView) findViewById(R.id.detail_page_release_date);
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Intent detailIntent = getIntent();
         if(detailIntent != null){
