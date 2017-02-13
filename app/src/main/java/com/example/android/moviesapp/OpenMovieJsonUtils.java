@@ -111,10 +111,12 @@ public class OpenMovieJsonUtils {
             JSONObject specificReviewInfo = reviewsListArray.getJSONObject(i);
             author = specificReviewInfo.getString(OM_AUTHOR);
             content = specificReviewInfo.getString(OM_CONTENT);
+            int number = i + 1;
 
-            String[] specificReviewData = new String[2];
-            specificReviewData[0] = author;
-            specificReviewData[1] = content;
+            String[] specificReviewData = new String[3];
+            specificReviewData[0] = String.valueOf(number);
+            specificReviewData[1] = author;
+            specificReviewData[2] = content;
 
             parsedReviewsData.add(specificReviewData);
         }

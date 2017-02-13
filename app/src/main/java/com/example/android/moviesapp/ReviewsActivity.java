@@ -74,7 +74,7 @@ public class ReviewsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<String[]> reviewsData) {
-            if (reviewsData != null) {
+            if (reviewsData != null && reviewsData.size() > 0) {
                 showReviewJsonDataView();
                 mReviewsAdapter.setReviewsData(reviewsData);
             } else {

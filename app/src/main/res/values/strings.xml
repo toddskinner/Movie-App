@@ -13,4 +13,6 @@
 
     <string name="reviews">Reviews</string>
 
+    <string name="no_reviews">No reviews written for this movie yet.</string>
+
 </resources>

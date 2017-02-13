@@ -24,12 +24,14 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         // Will display the position in the list, ie 0 through getItemCount() - 1
+        public final TextView reviewListItemNumberView;
         public final TextView reviewListItemAuthorView;
         public final TextView reviewListItemContentView;
 
         public ReviewViewHolder(View itemView) {
             super(itemView);
 
+            reviewListItemNumberView = (TextView) itemView.findViewById(R.id.tv_review_number);
             reviewListItemAuthorView = (TextView) itemView.findViewById(R.id.tv_review_author);
             reviewListItemContentView = (TextView) itemView.findViewById(R.id.tv_review_content);
         }
@@ -50,9 +52,11 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewVi
     @Override
     public void onBindViewHolder(ReviewViewHolder holder, int position) {
         String[] infoForThisReview = mReviewItems.get(position);
-        String author = infoForThisReview[0];
-        String content = infoForThisReview[1];
+        String number = infoForThisReview[0];
+        String author = infoForThisReview[1];
+        String content = infoForThisReview[2];
 
+        holder.reviewListItemNumberView.setText(number);
         holder.reviewListItemAuthorView.setText(author);
         holder.reviewListItemContentView.setText(content);
 
