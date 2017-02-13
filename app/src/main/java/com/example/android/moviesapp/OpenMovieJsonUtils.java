@@ -89,4 +89,36 @@ public class OpenMovieJsonUtils {
         String trailerKey = firstTrailerInfo.getString(OM_TRAILER_KEY);
         return trailerKey;
     }
+
+    public static ArrayList<String[]> getSimpleReviewsStringsFromJson(Context context, String reviewsJsonStr)
+            throws JSONException, ParseException {
+
+        /* Movie information. Each movie's info is an element of the "results" array */
+
+        final String OM_AUTHOR = "author";
+        final String OM_CONTENT = "content";
+
+        JSONObject forecastJson = new JSONObject(reviewsJsonStr);
+
+        JSONArray reviewsListArray = forecastJson.getJSONArray(OM_RESULTS);
+
+        ArrayList<String[]> parsedReviewsData = new ArrayList<String[]>();
+
+        for (int i = 0; i < reviewsListArray.length(); i++) {
+            String author;
+            String content;
+
+            JSONObject specificReviewInfo = reviewsListArray.getJSONObject(i);
+            author = specificReviewInfo.getString(OM_AUTHOR);
+            content = specificReviewInfo.getString(OM_CONTENT);
+
+            String[] specificReviewData = new String[2];
+            specificReviewData[0] = author;
+            specificReviewData[1] = content;
+
+            parsedReviewsData.add(specificReviewData);
+        }
+
+        return parsedReviewsData;
+    }
 }

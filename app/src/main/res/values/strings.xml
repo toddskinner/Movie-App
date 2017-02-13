@@ -8,4 +8,9 @@
     <string name="error">Failed to get a result</string>
 
     <string name="rating">Rating:</string>
+
+    <string name="trailer">Trailer</string>
+
+    <string name="reviews">Reviews</string>
+
 </resources>

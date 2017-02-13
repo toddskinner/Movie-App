@@ -83,6 +83,21 @@ public class NetworkUtils {
         return url;
     }
 
+    public static URL buildSpecificMovieReviewsUrl(String id) {
+        String mMovieDbSpecificMovieUrl = MOVIEDB_BASE_URL + id + "/reviews";
+        Uri builtUri = Uri.parse(mMovieDbSpecificMovieUrl).buildUpon()
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
     /**
      * This method returns the entire result from the HTTP response.
      *

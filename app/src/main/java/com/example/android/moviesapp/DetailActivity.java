@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,7 +14,6 @@ import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -29,6 +29,7 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mDisplayTrailer;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     URL mTrailerSearchUrl;
+    String mTrailerString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,6 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayReleaseDate = (TextView) findViewById(R.id.detail_page_release_date);
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
-        mDisplayTrailer = (TextView) findViewById(R.id.detail_page_trailer);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
@@ -80,8 +80,9 @@ public class DetailActivity extends AppCompatActivity {
         new TrailerQueryTask().execute(trailerSearchUrl);
     }
 
-    private void getReviewsData(URL reviewsSearchUrl){
-        new ReviewQueryTask().execute(reviewsSearchUrl);
+    public void playTrailer(View view){
+        Intent trailerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerString));
+        startActivity(trailerIntent);
     }
 
     public class TrailerQueryTask extends AsyncTask<URL, Void, String> {
@@ -110,40 +111,7 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String trailerData) {
             if (trailerData != null) {
-                String mTrailerString = YOUTUBE + trailerData;
-                mDisplayTrailer.setText(mTrailerString);
-            }
-            //need else
-        }
-    }
-
-    public class ReviewQueryTask extends AsyncTask<URL, Void, ArrayList<String[]>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<String[]> doInBackground(URL... params) {
-            if (params.length == 0) {
-                return null;
-            }
-            mReviewSearchUrl = params[0];
-            try {
-                String movieSearchResults = NetworkUtils.getResponseFromHttpUrl(mReviewSearchUrl);
-                ArrayList<String[]> readableJsonMovieData = OpenMovieJsonUtils.getSimpleMovieStringsFromJson(MainActivity.this, movieSearchResults);
-                return readableJsonMovieData;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<String[]> movieData) {
-            if (movieData != null) {
-                mMovieAdapter.setMovieData(movieData);
+                mTrailerString = YOUTUBE + trailerData;
             }
             //need else
         }
