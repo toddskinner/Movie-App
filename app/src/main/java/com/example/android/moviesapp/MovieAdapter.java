@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private ArrayList<String[]> mMovieItems;
+    private int mMovieId;
 
     final static String PICASSO_IMAGE_BASE_URL =
             "http://image.tmdb.org/t/p/w342/";

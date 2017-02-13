@@ -23,13 +23,13 @@ import static com.example.android.moviesapp.BuildConfig.API_KEY;
 public class NetworkUtils {
 
     final static String MOVIEDB_BASE_URL =
-            "https://api.themoviedb.org/3";
+            "https://api.themoviedb.org/3/movie/";
 
-    final static String MOVIEDB_POPULAR_URL =
-            "https://api.themoviedb.org/3/movie/popular";
+    //final static String MOVIEDB_POPULAR_URL =
+      //      "https://api.themoviedb.org/3/movie/popular";
 
-    final static String MOVIEDB_TOPRATED_URL =
-            "https://api.themoviedb.org/3/movie/top_rated";
+//    final static String MOVIEDB_TOPRATED_URL =
+  //          "https://api.themoviedb.org/3/movie/top_rated";
 
     final static String PARAM_API_KEY = "api_key";
 
@@ -39,7 +39,8 @@ public class NetworkUtils {
      * @return The URL to use to query the MovieDB server for popular movies.
      */
     public static URL buildPopularUrl() {
-        Uri builtUri = Uri.parse(MOVIEDB_POPULAR_URL).buildUpon()
+        String mMovieDbPopularUrl = MOVIEDB_BASE_URL + "popular";
+        Uri builtUri = Uri.parse(mMovieDbPopularUrl).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
 
@@ -53,7 +54,23 @@ public class NetworkUtils {
     }
 
     public static URL buildTopRatedUrl(){
-        Uri builtUri = Uri.parse(MOVIEDB_TOPRATED_URL).buildUpon()
+        String mMovieDbTopRatedUrl = MOVIEDB_BASE_URL + "top_rated";
+        Uri builtUri = Uri.parse(mMovieDbTopRatedUrl).buildUpon()
+                .appendQueryParameter(PARAM_API_KEY, API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    public static URL buildSpecificMovieTrailerUrl(String id) {
+        String mMovieDbSpecificMovieUrl = MOVIEDB_BASE_URL + id + "/videos";
+        Uri builtUri = Uri.parse(mMovieDbSpecificMovieUrl).buildUpon()
                 .appendQueryParameter(PARAM_API_KEY, API_KEY)
                 .build();
 

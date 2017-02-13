@@ -2,6 +2,7 @@ package com.example.android.moviesapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,18 +13,22 @@ import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
     final static String PICASSO_IMAGE_BASE_URL =
             "http://image.tmdb.org/t/p/w500/";
+    final String YOUTUBE = "http://www.youtube.com/watch?v=";
 
     private ImageView mDisplayPoster;
     private TextView mDisplayTitle;
     private TextView mDisplayReleaseDate;
     private TextView mDisplayVotes;
     private TextView mDisplaySummary;
+    private TextView mDisplayTrailer;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    URL mTrailerSearchUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,8 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayReleaseDate = (TextView) findViewById(R.id.detail_page_release_date);
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
+        mDisplayTrailer = (TextView) findViewById(R.id.detail_page_trailer);
+
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Intent detailIntent = getIntent();
@@ -59,8 +66,86 @@ public class DetailActivity extends AppCompatActivity {
                 mDisplaySummary.setText(detailsArray[2]);
                 mDisplayReleaseDate.setText(detailsArray[3]);
                 mDisplayVotes.setText(detailsArray[4]);
+
+                String specificMovieId = detailsArray[5];
+
+                URL movieTrailersUrl = NetworkUtils.buildSpecificMovieTrailerUrl(specificMovieId);
+                getTrailerData(movieTrailersUrl);
             }
         }
 
+    }
+
+    private void getTrailerData(URL trailerSearchUrl) {
+        new TrailerQueryTask().execute(trailerSearchUrl);
+    }
+
+    private void getReviewsData(URL reviewsSearchUrl){
+        new ReviewQueryTask().execute(reviewsSearchUrl);
+    }
+
+    public class TrailerQueryTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(URL... params) {
+            if (params.length == 0) {
+                return null;
+            }
+            mTrailerSearchUrl = params[0];
+            try {
+                String trailerSearchResultsJSON = NetworkUtils.getResponseFromHttpUrl(mTrailerSearchUrl);
+                String movieTrailerData = OpenMovieJsonUtils.getMovieTrailerFromJson(DetailActivity.this, trailerSearchResultsJSON);
+                return movieTrailerData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String trailerData) {
+            if (trailerData != null) {
+                String mTrailerString = YOUTUBE + trailerData;
+                mDisplayTrailer.setText(mTrailerString);
+            }
+            //need else
+        }
+    }
+
+    public class ReviewQueryTask extends AsyncTask<URL, Void, ArrayList<String[]>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<String[]> doInBackground(URL... params) {
+            if (params.length == 0) {
+                return null;
+            }
+            mReviewSearchUrl = params[0];
+            try {
+                String movieSearchResults = NetworkUtils.getResponseFromHttpUrl(mReviewSearchUrl);
+                ArrayList<String[]> readableJsonMovieData = OpenMovieJsonUtils.getSimpleMovieStringsFromJson(MainActivity.this, movieSearchResults);
+                return readableJsonMovieData;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String[]> movieData) {
+            if (movieData != null) {
+                mMovieAdapter.setMovieData(movieData);
+            }
+            //need else
+        }
     }
 }

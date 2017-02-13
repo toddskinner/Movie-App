@@ -78,6 +78,14 @@ android:fitsSystemWindows="true">
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/detail_page_trailer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="monospace"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/detail_page_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
