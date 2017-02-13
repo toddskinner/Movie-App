@@ -98,6 +98,18 @@ public class NetworkUtils {
         return url;
     }
 
+    public static URL buildSavedInstanceStateUrl(String storedUrl) {
+        Uri builtUri = Uri.parse(storedUrl);
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
     /**
      * This method returns the entire result from the HTTP response.
      *

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapterOnClickHandler {
 
+    private static final String STORED_QUERY_URL = "query";
     private MovieAdapter mMovieAdapter;
     private RecyclerView mMoviesListRecyclerView;
 
@@ -39,7 +40,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
-        mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+        if(savedInstanceState == null) {
+            mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+        } else {
+            mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
+        }
+
         loadMovieData(mMovieSearchUrl);
     }
 
@@ -122,5 +128,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        String storedUrl = mMovieSearchUrl.toString();
+        outState.putString(STORED_QUERY_URL, storedUrl);
     }
 }
