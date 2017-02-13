@@ -97,7 +97,8 @@ android:fitsSystemWindows="true">
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="@string/reviews"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:onClick="getReviews"/>
 
                 </LinearLayout>
 

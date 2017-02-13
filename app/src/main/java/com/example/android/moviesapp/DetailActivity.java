@@ -26,10 +26,10 @@ public class DetailActivity extends AppCompatActivity {
     private TextView mDisplayReleaseDate;
     private TextView mDisplayVotes;
     private TextView mDisplaySummary;
-    private TextView mDisplayTrailer;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
+    CollapsingToolbarLayout collapsingToolbarLayout;
     URL mTrailerSearchUrl;
     String mTrailerString;
+    String[] detailsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent detailIntent = getIntent();
         if(detailIntent != null){
             if(detailIntent.hasExtra("detailsArray")){
-                String[] detailsArray = detailIntent.getStringArrayExtra("detailsArray");
+                detailsArray = detailIntent.getStringArrayExtra("detailsArray");
 
                 String posterPath = detailsArray[0];
 
@@ -83,6 +83,12 @@ public class DetailActivity extends AppCompatActivity {
     public void playTrailer(View view){
         Intent trailerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerString));
         startActivity(trailerIntent);
+    }
+
+    public void getReviews(View view){
+        Intent reviewsIntent = new Intent(DetailActivity.this, ReviewsActivity.class);
+        reviewsIntent.putExtra("detailsArray", detailsArray);
+        startActivity(reviewsIntent);
     }
 
     public class TrailerQueryTask extends AsyncTask<URL, Void, String> {

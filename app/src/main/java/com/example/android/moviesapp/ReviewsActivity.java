@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -24,6 +25,10 @@ public class ReviewsActivity extends AppCompatActivity {
 
         mReviewsListRecyclerView = (RecyclerView) findViewById(R.id.rv_reviews);
         mReviewsErrorMessageTextView = (TextView) findViewById(R.id.reviews_error_message_display);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        mReviewsListRecyclerView.setLayoutManager(layoutManager);
 
         mReviewsAdapter = new ReviewsAdapter();
         mReviewsListRecyclerView.setAdapter(mReviewsAdapter);
