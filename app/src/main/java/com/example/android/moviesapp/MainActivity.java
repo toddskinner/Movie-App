@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         new MovieQueryTask().execute(movieSearchUrl);
     }
 
+    //create new function for data fetched from database
+
     @Override
     public void onClick(String[] specificMovie) {
         Intent intent = new Intent(MainActivity.this, DetailActivity.class);
@@ -126,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
                 mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchTopRatedUrl);
                 return true;
+            //use a different function than loadMovieData for database
+            //getLoaderManager?
         }
         return super.onOptionsItemSelected(item);
     }

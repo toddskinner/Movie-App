@@ -25,12 +25,6 @@ public class NetworkUtils {
     final static String MOVIEDB_BASE_URL =
             "https://api.themoviedb.org/3/movie/";
 
-    //final static String MOVIEDB_POPULAR_URL =
-      //      "https://api.themoviedb.org/3/movie/popular";
-
-//    final static String MOVIEDB_TOPRATED_URL =
-  //          "https://api.themoviedb.org/3/movie/top_rated";
-
     final static String PARAM_API_KEY = "api_key";
 
     /**
