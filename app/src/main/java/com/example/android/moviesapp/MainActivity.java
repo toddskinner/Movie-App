@@ -39,20 +39,31 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
-        Intent intent = getIntent();
+//        Intent intent = getIntent();
 
-        if(savedInstanceState == null && intent == null) {
+//        if(savedInstanceState == null && intent == null) {
+//            mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+//        } else if (savedInstanceState != null && intent == null){
+//            mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
+//        } else if(savedInstanceState == null && intent != null){
+//            if (intent.hasExtra("popularUrl")) {
+//                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+//            } else if (intent.hasExtra("topRatedUrl")) {
+//                mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
+//            }
+//        }
+
+        if (savedInstanceState == null) {
+            setTitle(R.string.popular_title);
             mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-        } else if (savedInstanceState != null && intent == null){
+        } else {
             mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
-        } else if(savedInstanceState == null && intent != null){
-            if (intent.hasExtra("popularUrl")) {
-                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-            } else if (intent.hasExtra("topRatedUrl")) {
-                mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
+            if (STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString())) {
+                setTitle(R.string.popular_title);
+            } else if (STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())){
+                setTitle(R.string.top_rated_title);
             }
         }
-
         loadMovieData(mMovieSearchUrl);
     }
 
@@ -129,11 +140,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
                 URL movieSearchPopularUrl = NetworkUtils.buildPopularUrl();
                 mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchPopularUrl);
+                setTitle(R.string.popular_title);
                 return true;
             case R.id.action_sort_top_rated:
                 URL movieSearchTopRatedUrl = NetworkUtils.buildTopRatedUrl();
                 mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchTopRatedUrl);
+                setTitle(R.string.top_rated_title);
                 return true;
             case R.id.action_sort_favorites:
                 Intent intent = new Intent(MainActivity.this, FavoriteMoviesActivity.class);

@@ -20,7 +20,8 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
                     FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW + " TEXT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_DATE + " TEXT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_VOTES + " REAL," +
-                    FavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER" + ")";
+                    FavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER," +
+                    FavoriteMoviesEntry.COLUMN_TRAILER_STRING + " TEXT" + ")";
 
     public MoviesDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

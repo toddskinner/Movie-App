@@ -31,6 +31,10 @@
         </activity>
         <activity android:name=".FavoriteMoviesActivity">
         </activity>
+        <provider
+            android:authorities="com.example.android.moviesapp"
+            android:name=".data.MoviesProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

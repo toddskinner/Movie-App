@@ -41,5 +41,6 @@ public class MoviesContract {
         public static final String COLUMN_MOVIE_DATE = "date";
         public static final String COLUMN_MOVIE_VOTES = "votes";
         public static final String COLUMN_MOVIE_ID = "id";
+        public static final String COLUMN_TRAILER_STRING = "trailerString";
     }
 }

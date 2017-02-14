@@ -1,5 +1,6 @@
 package com.example.android.moviesapp;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -7,10 +8,10 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.moviesapp.data.MoviesContract;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
@@ -31,7 +32,6 @@ public class DetailActivity extends AppCompatActivity {
     URL mTrailerSearchUrl;
     String mTrailerString;
     String[] detailsArray;
-    CheckBox mFavoriteStarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,6 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
 
-        mFavoriteStarButton = (CheckBox) findViewById(R.id.favorite_button);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Intent detailIntent = getIntent();
@@ -125,11 +124,29 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    public void addOrRemoveFromFavorites(View view){
-        if(mFavoriteStarButton.isChecked()){
-            System.out.println("Checked");
+    public void addToFavorites(View view){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_POSTER, detailsArray[0]);
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_TITLE, detailsArray[1]);
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW, detailsArray[2]);
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_DATE, detailsArray[3]);
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_VOTES, Double.valueOf(detailsArray[4]));
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID, Integer.valueOf(detailsArray[5]));
+        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_TRAILER_STRING, mTrailerString);
+        Uri uri = getContentResolver().insert(MoviesContract.FavoriteMoviesEntry.CONTENT_URI, contentValues);
+        if (uri != null) {
+            System.out.println("Saved " + uri.toString());
+        }
+    }
+
+    public void deleteItem(View view) {
+        String movieId = detailsArray[5];
+        int rowsDeleted = getContentResolver().delete(MoviesContract.FavoriteMoviesEntry.CONTENT_URI,
+                MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID + "=" + movieId, null);
+        if (rowsDeleted > 0) {
+            System.out.println("Deleted " + detailsArray[5]);
         } else {
-            System.out.println("Un-Checked");
+            System.out.println("Delete failed");
         }
     }
 }

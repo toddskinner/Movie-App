@@ -79,14 +79,23 @@ android:fitsSystemWindows="true">
 
                 <!-- found on StackOverflow:  http://stackoverflow.com/questions/8244252/star-button-in-android  -->
 
-                <CheckBox
+                <Button
                     android:button="@android:drawable/btn_star"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/favorite_button"
-                    android:background="@android:color/transparent"
                     android:layout_gravity="center"
-                    android:onClick="addOrRemoveFromFavorites"/>
+                    android:text="Add"
+                    android:onClick="addToFavorites"/>
+
+                <Button
+                    android:button="@android:drawable/btn_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/delete_button"
+                    android:layout_gravity="center"
+                    android:text="Delete"
+                    android:onClick="deleteItem"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
