@@ -21,8 +21,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
     private static final String STORED_QUERY_URL = "query";
     private MovieAdapter mMovieAdapter;
     private RecyclerView mMoviesListRecyclerView;
-
-    TextView mErrorMessageTextView;
+    private TextView mErrorMessageTextView;
     URL mMovieSearchUrl;
 
     @Override
@@ -40,10 +39,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
-        if(savedInstanceState == null) {
+        Intent intent = getIntent();
+
+        if(savedInstanceState == null && intent == null) {
             mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-        } else {
+        } else if (savedInstanceState != null && intent == null){
             mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
+        } else if(savedInstanceState == null && intent != null){
+            if (intent.hasExtra("popularUrl")) {
+                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+            } else if (intent.hasExtra("topRatedUrl")) {
+                mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
+            }
         }
 
         loadMovieData(mMovieSearchUrl);
@@ -128,8 +135,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
                 mMovieAdapter.setMovieData(null);
                 loadMovieData(movieSearchTopRatedUrl);
                 return true;
-            //use a different function than loadMovieData for database
-            //getLoaderManager?
+            case R.id.action_sort_favorites:
+                Intent intent = new Intent(MainActivity.this, FavoriteMoviesActivity.class);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

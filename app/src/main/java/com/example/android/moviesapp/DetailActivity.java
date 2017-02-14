@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class DetailActivity extends AppCompatActivity {
     URL mTrailerSearchUrl;
     String mTrailerString;
     String[] detailsArray;
+    CheckBox mFavoriteStarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
 
+        mFavoriteStarButton = (CheckBox) findViewById(R.id.favorite_button);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Intent detailIntent = getIntent();
@@ -73,7 +76,6 @@ public class DetailActivity extends AppCompatActivity {
                 getTrailerData(movieTrailersUrl);
             }
         }
-
     }
 
     private void getTrailerData(URL trailerSearchUrl) {
@@ -120,6 +122,14 @@ public class DetailActivity extends AppCompatActivity {
                 mTrailerString = YOUTUBE + trailerData;
             }
             //need else
+        }
+    }
+
+    public void addOrRemoveFromFavorites(View view){
+        if(mFavoriteStarButton.isChecked()){
+            System.out.println("Checked");
+        } else {
+            System.out.println("Un-Checked");
         }
     }
 }

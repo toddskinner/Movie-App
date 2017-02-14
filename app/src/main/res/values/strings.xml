@@ -15,4 +15,6 @@
 
     <string name="no_reviews">No reviews written for this movie yet.</string>
 
+    <string name="favorites">Favorites</string>
+
 </resources>
