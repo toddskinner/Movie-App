@@ -2,12 +2,15 @@ package com.example.android.moviesapp;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.moviesapp.data.MoviesContract.FavoriteMoviesEntry;
@@ -77,31 +80,30 @@ public class FavoriteMoviesActivity extends AppCompatActivity implements LoaderM
         mCursorAdapter.swapCursor(null);
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.favorites, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_favorites_sort_popular:
-//                URL movieSearchPopularUrl = NetworkUtils.buildPopularUrl();
-//                Intent popularIntent = new Intent(FavoriteMoviesActivity.this, MainActivity.class);
-//                popularIntent.putExtra("popularUrl", movieSearchPopularUrl);
-//                startActivity(popularIntent);
-//                return true;
-//            case R.id.action_favorites_sort_top_rated:
-//                URL movieSearchTopRatedUrl = NetworkUtils.buildTopRatedUrl();
-//                Intent topRatedIntent = new Intent(FavoriteMoviesActivity.this, MainActivity.class);
-//                topRatedIntent.putExtra("topRatedUrl", movieSearchTopRatedUrl);
-//                startActivity(topRatedIntent);
-//                return true;
-//            case R.id.action_favorites_sort_favorites:
-//                Intent intent = new Intent(this, FavoriteMoviesActivity.class);
-//                startActivity(intent);
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.favorites, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorites_sort_popular:
+                Intent popularIntent = new Intent(FavoriteMoviesActivity.this, MainActivity.class);
+                popularIntent.putExtra("popularUrl", 1);
+                startActivity(popularIntent);
+                return true;
+            case R.id.action_favorites_sort_top_rated:
+                Intent topRatedIntent = new Intent(FavoriteMoviesActivity.this, MainActivity.class);
+                topRatedIntent.putExtra("topRatedUrl", 2);
+                startActivity(topRatedIntent);
+                return true;
+            case R.id.action_favorites_sort_favorites:
+                Intent intent = new Intent(this, FavoriteMoviesActivity.class);
+                startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+

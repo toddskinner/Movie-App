@@ -1,6 +1,7 @@
 package com.example.android.moviesapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +24,25 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
 
     private Context mContext;
     private Cursor mCursor;
+    public String[] specificMovieDetails = new String[6];
     final static String PICASSO_IMAGE_BASE_URL =
             "http://image.tmdb.org/t/p/w342/";
 
     public FavoriteMoviesCursorAdapter(Context mContext){
         this.mContext = mContext;
+    }
+
+    private final FavoriteMoviesCursorAdapterOnClickHandler mClickHandler = new FavoriteMoviesCursorAdapterOnClickHandler() {
+        @Override
+        public void onClick(String[] specificMovie) {
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra("detailsArray", specificMovie);
+            mContext.startActivity(intent);
+        }
+    };
+
+    public interface FavoriteMoviesCursorAdapterOnClickHandler {
+        void onClick(String[] specificMovie);
     }
 
     @Override
@@ -86,18 +101,39 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
     }
 
     // Inner class for creating ViewHolders
-    class FavoriteMoviesViewHolder extends RecyclerView.ViewHolder {
+    public class FavoriteMoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView favoriteMovieImageView;
 
-        /**
-         * Constructor for the FavoriteMovieViewHolders.
-         *
-         * @param itemView The view inflated in onCreateViewHolder
-         */
         public FavoriteMoviesViewHolder(View itemView) {
             super(itemView);
             favoriteMovieImageView = (ImageView) itemView.findViewById(R.id.iv_item_favorite_movie);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int posterIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_POSTER);
+            int titleIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_TITLE);
+            int overviewIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW);
+            int dateIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_DATE);
+            int voteIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_VOTES);
+            int idIndex = mCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID);
+
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+
+            Double movieVotes = mCursor.getDouble(voteIndex);
+            int movieId = mCursor.getInt(idIndex);
+
+            specificMovieDetails[0] = mCursor.getString(posterIndex);
+            specificMovieDetails[1] = mCursor.getString(titleIndex);
+            specificMovieDetails[2] = mCursor.getString(overviewIndex);
+            specificMovieDetails[3] = mCursor.getString(dateIndex);
+            specificMovieDetails[4] = Double.valueOf(movieVotes).toString();
+            specificMovieDetails[5] = Integer.valueOf(movieId).toString();
+
+            mClickHandler.onClick(specificMovieDetails);
         }
     }
 }

@@ -39,31 +39,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
-//        Intent intent = getIntent();
+        Intent intent = getIntent();
 
-//        if(savedInstanceState == null && intent == null) {
-//            mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-//        } else if (savedInstanceState != null && intent == null){
-//            mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
-//        } else if(savedInstanceState == null && intent != null){
-//            if (intent.hasExtra("popularUrl")) {
-//                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-//            } else if (intent.hasExtra("topRatedUrl")) {
-//                mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
-//            }
-//        }
-
-        if (savedInstanceState == null) {
-            setTitle(R.string.popular_title);
-            mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-        } else {
-            mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
-            if (STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString())) {
+        if (intent == null) {
+            if (STORED_QUERY_URL == null) {
                 setTitle(R.string.popular_title);
-            } else if (STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())){
+                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+            } else {
+                mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
+                if (STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString())) {
+                    setTitle(R.string.popular_title);
+                } else if (STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())) {
+                    setTitle(R.string.top_rated_title);
+                }
+            }
+        } else {
+            if (intent.hasExtra("popularUrl")) {
+                setTitle(R.string.popular_title);
+                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+            } else {
                 setTitle(R.string.top_rated_title);
+                mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
             }
         }
+
         loadMovieData(mMovieSearchUrl);
     }
 
