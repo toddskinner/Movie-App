@@ -2,12 +2,14 @@ package com.example.android.moviesapp;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +34,8 @@ public class DetailActivity extends AppCompatActivity {
     URL mTrailerSearchUrl;
     String mTrailerString;
     String[] detailsArray;
+    CheckBox favoriteButton;
+    String cursorMovieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +47,13 @@ public class DetailActivity extends AppCompatActivity {
         mDisplayReleaseDate = (TextView) findViewById(R.id.detail_page_release_date);
         mDisplayVotes = (TextView) findViewById(R.id.detail_page_votes);
         mDisplaySummary = (TextView) findViewById(R.id.detail_page_summary);
+        favoriteButton = (CheckBox) findViewById(R.id.favorite_button);
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         Intent detailIntent = getIntent();
         if(detailIntent != null){
+
             if(detailIntent.hasExtra("detailsArray")){
                 detailsArray = detailIntent.getStringArrayExtra("detailsArray");
 
@@ -70,6 +76,35 @@ public class DetailActivity extends AppCompatActivity {
                 mDisplayVotes.setText(detailsArray[4]);
 
                 String specificMovieId = detailsArray[5];
+                System.out.println("This specific movie id is " + specificMovieId);
+                String mSelection = MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID + "=?";
+                String[] mSelectionArgs = new String[]{specificMovieId};
+
+
+                Uri idQueryUri = MoviesContract.FavoriteMoviesEntry.CONTENT_URI
+                        .buildUpon().appendQueryParameter(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID, specificMovieId).build();
+
+
+                Cursor checkFavoritesCursor = getContentResolver().query(
+                        idQueryUri,
+                        null,
+                        mSelection,
+                        mSelectionArgs,
+                        null);
+
+                if(checkFavoritesCursor != null && checkFavoritesCursor.moveToFirst()) {
+                    cursorMovieId = checkFavoritesCursor.getString(checkFavoritesCursor.getColumnIndex(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID));
+                    checkFavoritesCursor.close();
+                    System.out.println("Cursor returned " + cursorMovieId);
+                }
+
+                if(detailIntent.hasExtra("favoritesCheck")) {
+                    if (detailIntent.getBooleanExtra("favoritesCheck", true)) {
+                        favoriteButton.toggle();
+                    }
+                } else if (cursorMovieId != null && cursorMovieId.equals(specificMovieId)){
+                    favoriteButton.toggle();
+                }
 
                 URL movieTrailersUrl = NetworkUtils.buildSpecificMovieTrailerUrl(specificMovieId);
                 getTrailerData(movieTrailersUrl);
@@ -124,29 +159,32 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    public void addToFavorites(View view){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_POSTER, detailsArray[0]);
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_TITLE, detailsArray[1]);
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW, detailsArray[2]);
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_DATE, detailsArray[3]);
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_VOTES, Double.valueOf(detailsArray[4]));
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID, Integer.valueOf(detailsArray[5]));
-        contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_TRAILER_STRING, mTrailerString);
-        Uri uri = getContentResolver().insert(MoviesContract.FavoriteMoviesEntry.CONTENT_URI, contentValues);
-        if (uri != null) {
-            System.out.println("Saved " + uri.toString());
+    public void addToRemoveFromFavorites(View view){
+        if(favoriteButton.isChecked()){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_POSTER, detailsArray[0]);
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_TITLE, detailsArray[1]);
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW, detailsArray[2]);
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_DATE, detailsArray[3]);
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_VOTES, Double.valueOf(detailsArray[4]));
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID, Integer.valueOf(detailsArray[5]));
+            contentValues.put(MoviesContract.FavoriteMoviesEntry.COLUMN_TRAILER_STRING, mTrailerString);
+            Uri uri = getContentResolver().insert(MoviesContract.FavoriteMoviesEntry.CONTENT_URI, contentValues);
+            if (uri != null) {
+                System.out.println("Saved " + uri.toString());
+            }
         }
-    }
+        if(!favoriteButton.isChecked()){
+            String movieId = detailsArray[5];
+            int rowsDeleted = getContentResolver().delete(MoviesContract.FavoriteMoviesEntry.CONTENT_URI,
+                    MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID + "=" + movieId, null);
+            if (rowsDeleted > 0) {
+                System.out.println("Deleted " + detailsArray[5]);
+            } else {
+                System.out.println("Delete failed");
+            }
+        }
 
-    public void deleteItem(View view) {
-        String movieId = detailsArray[5];
-        int rowsDeleted = getContentResolver().delete(MoviesContract.FavoriteMoviesEntry.CONTENT_URI,
-                MoviesContract.FavoriteMoviesEntry.COLUMN_MOVIE_ID + "=" + movieId, null);
-        if (rowsDeleted > 0) {
-            System.out.println("Deleted " + detailsArray[5]);
-        } else {
-            System.out.println("Delete failed");
-        }
     }
+    
 }

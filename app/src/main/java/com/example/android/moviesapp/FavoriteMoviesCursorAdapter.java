@@ -37,6 +37,7 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
         public void onClick(String[] specificMovie) {
             Intent intent = new Intent(mContext, DetailActivity.class);
             intent.putExtra("detailsArray", specificMovie);
+            intent.putExtra("favoritesCheck", true);
             mContext.startActivity(intent);
         }
     };

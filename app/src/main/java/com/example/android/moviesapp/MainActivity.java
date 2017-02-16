@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
         Intent intent = getIntent();
 
-        if (intent == null) {
-            if (STORED_QUERY_URL == null) {
+        if (!intent.hasExtra("popularUrl") || !intent.hasExtra("topRatedUrl")) {
+            if (!STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString()) || !STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())) {
                 setTitle(R.string.popular_title);
                 mMovieSearchUrl = NetworkUtils.buildPopularUrl();
             } else {

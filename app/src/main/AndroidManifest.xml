@@ -29,7 +29,8 @@
             android:name=".ReviewsActivity"
             android:parentActivityName=".DetailActivity">
         </activity>
-        <activity android:name=".FavoriteMoviesActivity">
+        <activity android:name=".FavoriteMoviesActivity"
+            android:launchMode="singleTop">
         </activity>
         <provider
             android:authorities="com.example.android.moviesapp"

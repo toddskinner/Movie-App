@@ -64,7 +64,7 @@ public class MoviesProvider extends ContentProvider {
                         sortOrder);
                 break;
             case FAVORITE_MOVIES_ID:
-                selection = FavoriteMoviesEntry._ID + "=?";
+                selection = FavoriteMoviesEntry.COLUMN_MOVIE_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(FavoriteMoviesEntry.TABLE_NAME,
                         projection,
