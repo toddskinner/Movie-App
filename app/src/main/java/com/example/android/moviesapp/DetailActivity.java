@@ -36,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     String[] detailsArray;
     CheckBox favoriteButton;
     String cursorMovieId;
+    Intent detailIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class DetailActivity extends AppCompatActivity {
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
-        Intent detailIntent = getIntent();
+        detailIntent = getIntent();
         if(detailIntent != null){
 
             if(detailIntent.hasExtra("detailsArray")){
@@ -154,10 +155,12 @@ public class DetailActivity extends AppCompatActivity {
         protected void onPostExecute(String trailerData) {
             if (trailerData != null) {
                 mTrailerString = YOUTUBE + trailerData;
+            } else {
+              System.out.println("No trailer found");
             }
-            //need else
         }
     }
+
 
     public void addToRemoveFromFavorites(View view){
         if(favoriteButton.isChecked()){
@@ -184,7 +187,6 @@ public class DetailActivity extends AppCompatActivity {
                 System.out.println("Delete failed");
             }
         }
-
     }
-    
+
 }

@@ -3,6 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!-- followed recommended change from last reviewer but setting width below to match_parent and adding adjustViewBounds="true"
+    to activity_main doesn't seem to result in desired effect (movie posters enlarged in landscape view) and can't figure out why -->
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

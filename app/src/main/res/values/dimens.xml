@@ -2,4 +2,24 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
+
+    <!--Detail page dimens -->
+    <dimen name="detail_page_title_margin">2dp</dimen>
+    <dimen name="detail_page_date_text_size">18sp</dimen>
+    <dimen name="detail_page_title_text_size">28sp</dimen>
+    <dimen name="detail_page_checkbox_hw">36dp</dimen>
+    <dimen name="collapsing_toolbar_margin_start">48dp</dimen>
+    <dimen name="collapsing_toolbar_margin_end">64dp</dimen>
+    <dimen name="ratings_tv_marginTop">3dp</dimen>
+
+    <dimen name="review_number_margin">10dp</dimen>
+    <dimen name="review_list_item_top_margin">12dp</dimen>
+    <dimen name="review_num_and_author_text_size">18sp</dimen>
+
+    <dimen name="summary_horizontal_margin">12dp</dimen>
+    <dimen name="summary_vertical_margin">10dp</dimen>
+
+
+
 </resources>
