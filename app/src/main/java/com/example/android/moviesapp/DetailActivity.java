@@ -120,7 +120,9 @@ public class DetailActivity extends AppCompatActivity {
 
     public void playTrailer(View view){
         Intent trailerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mTrailerString));
-        startActivity(trailerIntent);
+        if(trailerIntent.resolveActivity(getPackageManager()) != null){
+            startActivity(trailerIntent);
+        }
     }
 
     public void getReviews(View view){

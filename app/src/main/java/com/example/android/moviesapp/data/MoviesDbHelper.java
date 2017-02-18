@@ -14,13 +14,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "favoritemovies.db";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + FavoriteMoviesEntry.TABLE_NAME + " (" +
-                    FavoriteMoviesEntry._ID + " INTEGER AUTOINCREMENT," +
+                    FavoriteMoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_POSTER + " TEXT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_TITLE + " TEXT UNIQUE," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_OVERVIEW + " TEXT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_DATE + " TEXT," +
                     FavoriteMoviesEntry.COLUMN_MOVIE_VOTES + " REAL," +
-                    FavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER PRIMARY KEY UNIQUE," +
+                    FavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE," +
                     FavoriteMoviesEntry.COLUMN_TRAILER_STRING + " TEXT" + ")";
 
     public MoviesDbHelper(Context context){

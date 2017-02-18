@@ -39,30 +39,25 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMovieAdapter = new MovieAdapter(this);
         mMoviesListRecyclerView.setAdapter(mMovieAdapter);
 
-        Intent intent = getIntent();
 
-        if (!intent.hasExtra("popularUrl") || !intent.hasExtra("topRatedUrl")) {
-            if (!STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString()) || !STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())) {
-                setTitle(R.string.popular_title);
+
+        if(savedInstanceState != null){
+            String queryUrl = savedInstanceState.getString(STORED_QUERY_URL);
+            if(queryUrl.equals(NetworkUtils.buildPopularUrl().toString())){
                 mMovieSearchUrl = NetworkUtils.buildPopularUrl();
-            } else {
-                mMovieSearchUrl = NetworkUtils.buildSavedInstanceStateUrl(savedInstanceState.getString(STORED_QUERY_URL));
-                if (STORED_QUERY_URL.equals(NetworkUtils.buildPopularUrl().toString())) {
-                    setTitle(R.string.popular_title);
-                } else if (STORED_QUERY_URL.equals(NetworkUtils.buildTopRatedUrl().toString())) {
-                    setTitle(R.string.top_rated_title);
-                }
-            }
-        } else {
-            if (intent.hasExtra("popularUrl")) {
                 setTitle(R.string.popular_title);
-                mMovieSearchUrl = NetworkUtils.buildPopularUrl();
             } else {
-                setTitle(R.string.top_rated_title);
                 mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
+                setTitle(R.string.top_rated_title);
             }
+        } else if (getIntent().hasExtra("topRatedUrl")){
+            mMovieSearchUrl = NetworkUtils.buildTopRatedUrl();
+            setTitle(R.string.top_rated_title);
         }
-
+        else {
+            mMovieSearchUrl = NetworkUtils.buildPopularUrl();
+            setTitle(R.string.popular_title);
+        }
         loadMovieData(mMovieSearchUrl);
     }
 
@@ -157,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         String storedUrl = mMovieSearchUrl.toString();
         outState.putString(STORED_QUERY_URL, storedUrl);
     }
