@@ -46,6 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public class MovieViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public final ImageView listMovieImageView;
+
         public MovieViewHolder(View itemView){
             super(itemView);
             listMovieImageView = (ImageView) itemView.findViewById(R.id.iv_item_movie);
@@ -86,6 +87,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Uri builtUri = Uri.parse(PICASSO_IMAGE_BASE_URL).buildUpon()
                 .appendEncodedPath(posterPath)
                 .build();
+
+        //for debugging purposes
+        System.out.println("Built uri is " + builtUri);
+
         URL url = null;
         try {
             url = new URL(builtUri.toString());
@@ -93,6 +98,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             e.printStackTrace();
         }
         Picasso.with(holder.listMovieImageView.getContext()).load(url.toString()).into(holder.listMovieImageView);
+
+        // for debugging
+        System.out.println("Picasso called and image set at " + holder.getAdapterPosition());
     }
 
     @Override
