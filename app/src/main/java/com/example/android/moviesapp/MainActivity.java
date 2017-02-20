@@ -33,6 +33,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         mMoviesListRecyclerView = (RecyclerView) findViewById(R.id.rv_movies);
         mErrorMessageTextView = (TextView) findViewById(R.id.error_message_display);
 
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        mMoviesListRecyclerView.setLayoutManager(layoutManager);
+        mMoviesListRecyclerView.setHasFixedSize(true);
+
+        mMovieAdapter = new MovieAdapter(this);
+        mMoviesListRecyclerView.setAdapter(mMovieAdapter);
+
         if(savedInstanceState != null){
             String queryUrl = savedInstanceState.getString(STORED_QUERY_URL);
             if(queryUrl.equals(NetworkUtils.buildPopularUrl().toString())){
@@ -56,36 +63,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
     private void loadMovieData(URL movieSearchUrl){
         showJsonDataView();
         new MovieQueryTask().execute(movieSearchUrl);
-    }
-
-    private void setAdapterWithFetchedData(ArrayList<String[]> movieData){
-        //using these println to check when Async Task complete
-        System.out.println("setAdapterWithFetchedData started");
-
-        if (movieData != null) {
-
-            //for debugging - check if retrieving proper data and in time prior to setting adapter
-            System.out.println(movieData);
-            String[] testArray = movieData.get(0);
-            System.out.println(testArray[0]);
-            System.out.println(testArray[1]);
-            System.out.println(testArray[2]);
-            System.out.println(testArray[3]);
-            System.out.println(testArray[4]);
-            System.out.println(testArray[5]);
-
-            mMovieAdapter = new MovieAdapter(this);
-            mMovieAdapter.setMovieData(movieData);
-            mMoviesListRecyclerView.setAdapter(mMovieAdapter);
-
-            System.out.println("setAdapter(mMovieAdapter done");
-
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-            mMoviesListRecyclerView.setLayoutManager(layoutManager);
-            mMoviesListRecyclerView.setHasFixedSize(true);
-        } else {
-            showErrorMessage();
-        }
     }
 
     //create new function for data fetched from database
@@ -113,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
             try {
                 String movieSearchResults = NetworkUtils.getResponseFromHttpUrl(mMovieSearchUrl);
                 ArrayList<String[]> readableJsonMovieData = OpenMovieJsonUtils.getSimpleMovieStringsFromJson(MainActivity.this, movieSearchResults);
-                System.out.println("doInBackground done");
                 return readableJsonMovieData;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -123,9 +99,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
         @Override
         protected void onPostExecute(ArrayList<String[]> movieData) {
-            System.out.println("OnPostExecute started");
-            setAdapterWithFetchedData(movieData);
-            System.out.println("OnPostExecute done");
+            if (movieData != null) {
+                mMovieAdapter.setMovieData(movieData);
+            } else {
+                showErrorMessage();
+            }
         }
     }
 
